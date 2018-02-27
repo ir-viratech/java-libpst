@@ -55,7 +55,18 @@ public class PSTMessage extends PSTObject {
     public static final int IMPORTANCE_NORMAL = 1;
     public static final int IMPORTANCE_HIGH = 2;
 
-    PSTMessage(final PSTFile theFile, final DescriptorIndexNode descriptorIndexNode) throws PSTException, IOException {
+    private static String checksum;
+    
+    
+    public String getChecksum() {
+		return checksum;
+	}
+
+	public void setChecksum(String checksum) {
+		PSTMessage.checksum = checksum;
+	}
+
+	PSTMessage(final PSTFile theFile, final DescriptorIndexNode descriptorIndexNode) throws PSTException, IOException {
         super(theFile, descriptorIndexNode);
     }
 

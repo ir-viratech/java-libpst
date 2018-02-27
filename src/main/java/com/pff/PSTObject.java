@@ -34,6 +34,7 @@
 package com.pff;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -754,8 +755,14 @@ public class PSTObject {
             if (nidType == 0x02 || nidType == 0x03) {
                 return new PSTFolder(theFile, folderIndexNode, table, localDescriptorItems);
             } else {
-                return PSTObject.createAppropriatePSTMessageObject(theFile, folderIndexNode, table,
-                    localDescriptorItems);
+            	
+            	PSTMessage pstMessage = PSTObject.createAppropriatePSTMessageObject(theFile, folderIndexNode, table, localDescriptorItems);
+				try(InputStream stream = new PSTNodeInputStream(theFile, theFile.getOffsetIndexNode(folderIndexNode.dataOffsetIndexIdentifier))) {
+					pstMessage.setChecksum(ChecksumUtils.SHA1Convert(stream));
+				}
+				return pstMessage;
+//                return PSTObject.createAppropriatePSTMessageObject(theFile, folderIndexNode, table,
+//                    localDescriptorItems);
             }
         } else {
             throw new PSTException(
